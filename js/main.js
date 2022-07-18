@@ -24,7 +24,7 @@ function renderUsers(source, domNode) {
 
 function renderError(domNode) {
   const errorElement = document.createElement('div')
-  const innerErrorHtml = `<h4>Oops! Algo salió mal</h4>`
+  const innerErrorHtml = `<h4>Ocurrio un error!!</h4>`
 
   errorElement.innerHTML = innerErrorHtml
 
@@ -38,7 +38,7 @@ const cache = JSON.parse(localStorage.getItem('usersCache'))
 if (cache) {
   renderUsers(cache, usersListContainerElement)
 } else {
-  // realizamos la peticion y renderizamos los datos
+  // Realiza la peticion y renderiza los datos
   fetch(API_URL)
   .then(wrapper => wrapper.json())
   .then(response => {
