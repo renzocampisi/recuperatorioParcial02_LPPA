@@ -31,8 +31,10 @@ h2 {
 section {
     display: flex;
     flex-direction: column;
-    padding-bottom: 35%;
+    align-items: center;
+    margin-bottom: 35%;
     margin-top: 15%;
+    width: 80%;
 }
 th, td {
     padding: 0.3em;
@@ -57,13 +59,8 @@ h4 {
 footer {
     display: flex;
     justify-content: center;
-    align-items: center;
     height: 50px;
     width: 100%;
     color: #fff;
     background-color: #000;
-}
-p {
-    display: flex;
-    justify-content: center;
 }
