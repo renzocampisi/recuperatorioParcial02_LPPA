@@ -1,42 +1,56 @@
 // https://basic-server-one.vercel.app/users
-
-/* 
-  {
-    key: valores
-    key: valores
-    key: valores
-    key: valores
-    key: valores
-    key: valores
-    key: valores
-  }
-*/
-
 const API_URL = 'https://basic-server-one.vercel.app/users'
 
-const usersListContainerElement = document.querySelector('.usersListContainer')
+function renderUsers(source, domNode) {
+  const tableDataFragment = document.createDocumentFragment()
+  for (let i = 0; i < source.length; i++) {
+    const { name, username, email, phone } = source[i]
 
-fetch(API_URL)
+    const rowElement = document.createElement('tr')
+    const innerRowData = 
+    `
+      <td>${name}</td>
+      <td>${username}</td>
+      <td>${email}</td>
+      <td>${phone}</td>
+    `
+
+    rowElement.innerHTML = innerRowData
+
+    tableDataFragment.appendChild(rowElement)
+  }
+  domNode.appendChild(tableDataFragment)
+}
+
+function renderError(domNode) {
+  const errorElement = document.createElement('div')
+  const innerErrorHtml = `<h4>Oops! Algo salió mal</h4>`
+
+  errorElement.innerHTML = innerErrorHtml
+
+  domNode.appendChild(errorElement)
+}
+
+const usersListContainerElement = document.querySelector('.usersListContainer')
+const errorContainer = document.querySelector('.errorContainer')
+const cache = JSON.parse(localStorage.getItem('usersCache'))
+
+if (cache) {
+  renderUsers(cache, usersListContainerElement)
+} else {
+  // realizamos la peticion y renderizamos los datos
+  fetch(API_URL)
   .then(wrapper => wrapper.json())
   .then(response => {
-    const tableDataFragment = document.createDocumentFragment()
 
-    for (let i = 0; i < response.data.length; i++) {
-      const { name, username, email, phone } = response.data[i]
-
-      const rowElement = document.createElement('tr')
-      const innerRowData = 
-      `
-        <td>${name}</td>
-        <td>${username}</td>
-        <td>${email}</td>
-        <td>${phone}</td>
-      `
-
-      rowElement.innerHTML = innerRowData
-
-      tableDataFragment.appendChild(rowElement)
+    if (response.error) {
+      renderError(errorContainer)
+    } else {
+      renderUsers(response.data, usersListContainerElement)
+      localStorage.setItem('usersCache', JSON.stringify(response.data))
     }
-
-    usersListContainerElement.appendChild(tableDataFragment)
   })
+  .catch(error => {
+    renderError(errorContainer)
+  })
+}
